@@ -11,19 +11,18 @@ Future<void> main() async {
 
   await Future.delayed(const Duration(seconds: 2));
 
-  final rotaInicial = AppRoutes.homePage;
+  const rotaInicial = AppRoutes.homePage;
 
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => ExemploPageStore())],
-      child: MyApp(rotaInicial: rotaInicial),
+      child: const MyApp(rotaInicial: rotaInicial),
     ),
   );
 }
 
 /// Chave global para exibir SnackBars e diálogos fora do contexto de widget.
-final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
-    GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 /// Widget raiz da aplicação.
 class MyApp extends StatelessWidget {

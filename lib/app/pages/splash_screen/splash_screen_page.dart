@@ -24,14 +24,14 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
               end: Alignment.bottomCenter,
             ),
           ),
-          child: Center(
+          child: const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    const SizedBox(
+                    SizedBox(
                       width: 280,
                       height: 280,
                       child: CircularProgressIndicator(
@@ -40,8 +40,8 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20.0),
-                const Text(
+                SizedBox(height: 20.0),
+                Text(
                   'Preparando tudo...',
                   style: TextStyle(
                     color: Colors.white,
