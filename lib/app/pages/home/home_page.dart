@@ -62,7 +62,7 @@ class HomePage extends StatelessWidget {
                   ordem: '03',
                   titulo: 'Cadastro de Clientes',
                   descricao:
-                      'CRUD completo (listar, criar, editar, excluir) seguindo a arquitetura, com fake API em SQLite.',
+                      'Fake API (SQLite) pronta. Você implementa Store + Page do CRUD: listar, criar, editar e excluir.',
                   icone: Icons.people_outline,
                   cor: colorScheme.secondary,
                   onTap: () => Navigator.pushNamed(context, AppRoutes.clientePage),

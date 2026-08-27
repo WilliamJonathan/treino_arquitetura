@@ -9,12 +9,16 @@ flutter pub get
 flutter run
 ```
 
-## Desafios
+## Roteiro
 
-1. **Calculadora** — layout com `Column`/`Row` e `setState`
-2. **Consultar CEP** — implementar o service HTTP (ViaCEP) em `consultar_cep_services.dart`
-3. **Clientes** — CRUD completo de referência com fake API SQLite
-4. **Exemplo** — pasta modelo da arquitetura
+Siga o **[ROTEIRO_ESTUDOS.md](ROTEIRO_ESTUDOS.md)**.
+
+| # | Desafio | Você implementa |
+|---|---------|-----------------|
+| 01 | Calculadora | UI + `setState` |
+| 02 | Consultar CEP | Service HTTP |
+| 03 | Clientes | Store + Page (fake API já pronta) |
+| REF | Exemplo | só estudar |
 
 ## Arquitetura
 

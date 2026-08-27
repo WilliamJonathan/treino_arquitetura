@@ -57,8 +57,12 @@ result.fold(
 
 ## Exceções pedagógicas
 
+Ver [ROTEIRO_ESTUDOS.md](../../../ROTEIRO_ESTUDOS.md).
+
 - **Calculadora**: só Page + `setState` (treino de layout)
-- **Consultar CEP**: service pode ficar com `TODO(estagiário)` de propósito
+- **Consultar CEP**: service com `TODO(estagiário)` — não complete sem pedido
+- **Clientes**: Service/Model prontos; Store + Page com `TODO(estagiário)` — não complete sem pedido
+- Gabarito mentor: `docs/gabarito/cliente/`
 
 ## UI
 

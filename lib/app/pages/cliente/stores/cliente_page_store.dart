@@ -4,7 +4,11 @@ import 'package:treino_arquitetura/app/pages/cliente/models/cliente_model.dart';
 import 'package:treino_arquitetura/app/pages/cliente/services/cliente_services.dart';
 import 'package:treino_arquitetura/utils/generic_states.dart';
 
+/// Desafio 03 — implemente a Store consumindo [ClienteServices] (fake API pronta).
+///
+/// Espelhe: `exemplo_page_store.dart` e `consultar_cep_page_store.dart`.
 class ClientePageStore extends ChangeNotifier {
+  // ignore: unused_field - o estagiário usa este service nos TODOs abaixo
   final IClienteServices _clienteServices = ClienteServices.instance;
 
   GenericStates _state = EmptyGenericState();
@@ -17,85 +21,32 @@ class ClientePageStore extends ChangeNotifier {
   String? _mensagemAcao;
   String? get mensagemAcao => _mensagemAcao;
 
+  /// Lista todos os clientes.
   Future<void> index() async {
-    state = LoadingGenericState();
-    final result = await _clienteServices.index();
-    result.fold(
-      onSuccess: (data) {
-        state = SuccessGenericState(data: data);
-      },
-      onError: (message) {
-        state = ErrorGenericState(message: message);
-      },
-      onEmpty: () {
-        state = EmptyGenericState();
-      },
-    );
+    // TODO(estagiário):
+    // 1. state = LoadingGenericState()
+    // 2. chamar _clienteServices.index()
+    // 3. result.fold → SuccessGenericState / ErrorGenericState / EmptyGenericState
   }
 
+  /// Cria um cliente. Retorne true se deu certo.
   Future<bool> store(ClienteModel data) async {
-    final result = await _clienteServices.store(data);
-    var ok = false;
-    result.fold(
-      onSuccess: (_) {
-        _mensagemAcao = 'Cliente criado com sucesso';
-        ok = true;
-      },
-      onError: (message) {
-        _mensagemAcao = message;
-        ok = false;
-      },
-      onEmpty: () {
-        _mensagemAcao = 'Nenhum dado retornado';
-        ok = false;
-      },
-    );
-    notifyListeners();
-    if (ok) await index();
-    return ok;
+    // TODO(estagiário):
+    // 1. chamar _clienteServices.store(data)
+    // 2. preencher _mensagemAcao
+    // 3. se sucesso, chamar await index() e retornar true
+    return false;
   }
 
+  /// Atualiza um cliente. Retorne true se deu certo.
   Future<bool> update(ClienteModel data) async {
-    final result = await _clienteServices.update(data);
-    var ok = false;
-    result.fold(
-      onSuccess: (_) {
-        _mensagemAcao = 'Cliente atualizado com sucesso';
-        ok = true;
-      },
-      onError: (message) {
-        _mensagemAcao = message;
-        ok = false;
-      },
-      onEmpty: () {
-        _mensagemAcao = 'Nenhum dado retornado';
-        ok = false;
-      },
-    );
-    notifyListeners();
-    if (ok) await index();
-    return ok;
+    // TODO(estagiário): espelhe store(), usando _clienteServices.update
+    return false;
   }
 
+  /// Exclui um cliente pelo id. Retorne true se deu certo.
   Future<bool> destroy(int id) async {
-    final result = await _clienteServices.destroy(id);
-    var ok = false;
-    result.fold(
-      onSuccess: (_) {
-        _mensagemAcao = 'Cliente excluído com sucesso';
-        ok = true;
-      },
-      onError: (message) {
-        _mensagemAcao = message;
-        ok = false;
-      },
-      onEmpty: () {
-        _mensagemAcao = 'Nenhum dado retornado';
-        ok = false;
-      },
-    );
-    notifyListeners();
-    if (ok) await index();
-    return ok;
+    // TODO(estagiário): espelhe store(), usando _clienteServices.destroy
+    return false;
   }
 }
