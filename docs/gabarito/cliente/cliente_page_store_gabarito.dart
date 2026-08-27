@@ -19,8 +19,10 @@ class ClientePageStoreGabarito extends ChangeNotifier {
   String? _mensagemAcao;
   String? get mensagemAcao => _mensagemAcao;
 
-  Future<void> index() async {
-    state = LoadingGenericState();
+  Future<void> index({bool showLoading = true}) async {
+    if (showLoading) {
+      state = LoadingGenericState();
+    }
     final result = await _clienteServices.index();
     result.fold(
       onSuccess: (data) {
@@ -52,8 +54,11 @@ class ClientePageStoreGabarito extends ChangeNotifier {
         ok = false;
       },
     );
-    notifyListeners();
-    if (ok) await index();
+    if (ok) {
+      await index(showLoading: false);
+    } else {
+      notifyListeners();
+    }
     return ok;
   }
 
@@ -74,8 +79,11 @@ class ClientePageStoreGabarito extends ChangeNotifier {
         ok = false;
       },
     );
-    notifyListeners();
-    if (ok) await index();
+    if (ok) {
+      await index(showLoading: false);
+    } else {
+      notifyListeners();
+    }
     return ok;
   }
 
@@ -96,8 +104,11 @@ class ClientePageStoreGabarito extends ChangeNotifier {
         ok = false;
       },
     );
-    notifyListeners();
-    if (ok) await index();
+    if (ok) {
+      await index(showLoading: false);
+    } else {
+      notifyListeners();
+    }
     return ok;
   }
 }

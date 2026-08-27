@@ -26,98 +26,23 @@ class _ExemploPageState extends State<ExemploPage> {
   }
 
   Future<void> _abrirFormulario({ExemploModel? item}) async {
-    final tituloController = TextEditingController(text: item?.titulo ?? '');
-    final descricaoController = TextEditingController(text: item?.descricao ?? '');
-    final formKey = GlobalKey<FormState>();
     final isEdicao = item != null;
 
-    final salvou = await showModalBottomSheet<bool>(
+    // O formulário vive num StatefulWidget próprio: os TextEditingController
+    // são descartados no dispose do sheet (evita erro ao fechar o modal).
+    final resultado = await showModalBottomSheet<ExemploModel>(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (sheetContext) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 8,
-            bottom: MediaQuery.viewInsetsOf(sheetContext).bottom + 20,
-          ),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  isEdicao ? 'Editar item' : 'Novo item',
-                  style: Theme.of(sheetContext).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: tituloController,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: const InputDecoration(
-                    labelText: 'Título',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.title),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Informe o título';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-                TextFormField(
-                  controller: descricaoController,
-                  textCapitalization: TextCapitalization.sentences,
-                  maxLines: 2,
-                  decoration: const InputDecoration(
-                    labelText: 'Descrição',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.notes_outlined),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Informe a descrição';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                FilledButton(
-                  onPressed: () {
-                    if (!(formKey.currentState?.validate() ?? false)) return;
-                    Navigator.pop(sheetContext, true);
-                  },
-                  child: Text(isEdicao ? 'Salvar alterações' : 'Cadastrar'),
-                ),
-              ],
-            ),
-          ),
-        );
+        return _ExemploFormSheet(item: item);
       },
     );
 
-    if (salvou != true || !mounted) {
-      tituloController.dispose();
-      descricaoController.dispose();
-      return;
-    }
+    if (resultado == null || !mounted) return;
 
     final store = Provider.of<ExemploPageStore>(context, listen: false);
-    final model = ExemploModel(
-      id: item?.id ?? 0,
-      titulo: tituloController.text,
-      descricao: descricaoController.text,
-    );
-
-    tituloController.dispose();
-    descricaoController.dispose();
-
-    final ok = isEdicao ? await store.update(model) : await store.store(model);
+    final ok = isEdicao ? await store.update(resultado) : await store.store(resultado);
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -306,6 +231,114 @@ class _ExemploPageState extends State<ExemploPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Formulário do bottom sheet — dono dos controllers (dispose seguro).
+class _ExemploFormSheet extends StatefulWidget {
+  const _ExemploFormSheet({this.item});
+
+  final ExemploModel? item;
+
+  @override
+  State<_ExemploFormSheet> createState() => _ExemploFormSheetState();
+}
+
+class _ExemploFormSheetState extends State<_ExemploFormSheet> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _tituloController;
+  late final TextEditingController _descricaoController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tituloController = TextEditingController(text: widget.item?.titulo ?? '');
+    _descricaoController = TextEditingController(text: widget.item?.descricao ?? '');
+  }
+
+  @override
+  void dispose() {
+    _tituloController.dispose();
+    _descricaoController.dispose();
+    super.dispose();
+  }
+
+  void _salvar() {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    Navigator.pop(
+      context,
+      ExemploModel(
+        id: widget.item?.id ?? 0,
+        titulo: _tituloController.text,
+        descricao: _descricaoController.text,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isEdicao = widget.item != null;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 20,
+        right: 20,
+        top: 8,
+        bottom: MediaQuery.viewInsetsOf(context).bottom + 20,
+      ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              isEdicao ? 'Editar item' : 'Novo item',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _tituloController,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: const InputDecoration(
+                labelText: 'Título',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.title),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Informe o título';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _descricaoController,
+              textCapitalization: TextCapitalization.sentences,
+              maxLines: 2,
+              decoration: const InputDecoration(
+                labelText: 'Descrição',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.notes_outlined),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Informe a descrição';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 20),
+            FilledButton(
+              onPressed: _salvar,
+              child: Text(isEdicao ? 'Salvar alterações' : 'Cadastrar'),
+            ),
+          ],
+        ),
       ),
     );
   }

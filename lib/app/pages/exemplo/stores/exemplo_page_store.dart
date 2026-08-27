@@ -21,8 +21,13 @@ class ExemploPageStore extends ChangeNotifier {
   String? get mensagemAcao => _mensagemAcao;
 
   /// Lista todos os itens.
-  Future<void> index() async {
-    state = LoadingGenericState();
+  ///
+  /// Use [showLoading] = false ao recarregar após create/update/delete,
+  /// para não trocar a árvore de widgets no meio de animações (bottom sheet / SnackBar).
+  Future<void> index({bool showLoading = true}) async {
+    if (showLoading) {
+      state = LoadingGenericState();
+    }
     final result = await _exemploServices.index();
     result.fold(
       onSuccess: (data) {
@@ -55,8 +60,11 @@ class ExemploPageStore extends ChangeNotifier {
         ok = false;
       },
     );
-    notifyListeners();
-    if (ok) await index();
+    if (ok) {
+      await index(showLoading: false);
+    } else {
+      notifyListeners();
+    }
     return ok;
   }
 
@@ -78,8 +86,11 @@ class ExemploPageStore extends ChangeNotifier {
         ok = false;
       },
     );
-    notifyListeners();
-    if (ok) await index();
+    if (ok) {
+      await index(showLoading: false);
+    } else {
+      notifyListeners();
+    }
     return ok;
   }
 
@@ -101,8 +112,11 @@ class ExemploPageStore extends ChangeNotifier {
         ok = false;
       },
     );
-    notifyListeners();
-    if (ok) await index();
+    if (ok) {
+      await index(showLoading: false);
+    } else {
+      notifyListeners();
+    }
     return ok;
   }
 }
