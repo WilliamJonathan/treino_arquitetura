@@ -15,7 +15,11 @@ Future<void> main() async {
 
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => ExemploPageStore())],
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ExemploPageStore(),
+        ),
+      ],
       child: const MyApp(rotaInicial: rotaInicial),
     ),
   );
