@@ -32,16 +32,13 @@ class ExemploServices implements IExemploServices {
   }
 
   @override
-  Future<ResultState<ExemploModel>> store(Map<String, dynamic> data) async {
+  Future<ResultState<ExemploModel>> store(ExemploModel data) async {
     // TODO: implement store
     throw UnimplementedError();
   }
 
   @override
-  Future<ResultState<ExemploModel>> update(
-    int id,
-    Map<String, dynamic> data,
-  ) async {
+  Future<ResultState<ExemploModel>> update(ExemploModel data) async {
     // TODO: implement update
     throw UnimplementedError();
   }

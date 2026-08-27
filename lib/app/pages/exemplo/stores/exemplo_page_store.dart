@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treino_arquitetura/app/pages/exemplo/interfaces/i_exemplo_services.dart';
+import 'package:treino_arquitetura/app/pages/exemplo/models/exemplo_model.dart';
 import 'package:treino_arquitetura/app/pages/exemplo/services/exemplo_services.dart';
 import 'package:treino_arquitetura/utils/generic_states.dart';
 
@@ -16,6 +17,22 @@ class ExemploPageStore extends ChangeNotifier {
   Future<void> index() async {
     state = LoadingGenericState();
     final result = await _exemploServices.index();
+    result.fold(
+      onSuccess: (data) {
+        state = SuccessGenericState(data: data);
+      },
+      onError: (message) {
+        state = ErrorGenericState(message: message);
+      },
+      onEmpty: () {
+        state = EmptyGenericState();
+      },
+    );
+  }
+
+  Future<void> store(ExemploModel data) async {
+    state = LoadingGenericState();
+    final result = await _exemploServices.store(data);
     result.fold(
       onSuccess: (data) {
         state = SuccessGenericState(data: data);
