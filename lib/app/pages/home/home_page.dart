@@ -72,7 +72,7 @@ class HomePage extends StatelessWidget {
                   ordem: 'REF',
                   titulo: 'Exemplo (referência)',
                   descricao:
-                      'Pasta modelo da arquitetura: Page → Store → Interface → Service → Model.',
+                      'CRUD em memória completo (cadastrar, listar, editar, excluir). Base para o desafio de Clientes.',
                   icone: Icons.menu_book_outlined,
                   cor: colorScheme.outline,
                   onTap: () => Navigator.pushNamed(context, AppRoutes.exemploPage),

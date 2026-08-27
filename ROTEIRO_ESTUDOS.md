@@ -7,17 +7,21 @@ Siga a ordem. Cada desafio aumenta a complexidade.
 ## Antes de começar
 
 1. Rode o app: `flutter pub get` e `flutter run`
-2. Abra a pasta **Exemplo (REF)** no código: `lib/app/pages/exemplo/`
-3. Entenda o fluxo sem implementar nada ainda:
+2. Abra **Exemplo (REF)** no app e no código: `lib/app/pages/exemplo/`
+3. Cadastre, edite e exclua itens — é um CRUD **em memória** completo
+4. Entenda o fluxo:
 
 ```
 Page  →  Store  →  Service (via Interface)  →  dados
- UI       estado      regras de acesso         Model
+ UI       estado      lista em memória           Model
 ```
 
 - `GenericStates` na Store: Empty / Loading / Error / Success  
 - `ResultState` no Service: Success / Error / Empty + `.fold(...)`  
 - Service é **singleton** (`instance`)
+- Depois de `store` / `update` / `destroy`, a Store chama `index()` de novo
+
+No desafio de **Clientes**, o padrão da Page/Store é o mesmo; só o Service muda (SQLite em vez de lista em memória).
 
 ---
 

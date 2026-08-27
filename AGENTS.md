@@ -34,7 +34,7 @@ Referência canônica: `lib/app/pages/exemplo/`
 | 01 | Calculadora | esqueleto da page | layout + `setState` |
 | 02 | Consultar CEP | Model, Interface, Store, Page | só o Service (`http`) |
 | 03 | Clientes | Model, Interface, Service (fake API SQLite) | Store + Page (CRUD) |
-| REF | Exemplo | tudo (modelo) | só estudar |
+| REF | Exemplo | CRUD em memória completo (Page + Store + Service) | estudar e espelhar no desafio 03 |
 
 Gabarito do desafio 03 (mentor): `docs/gabarito/cliente/`
 
