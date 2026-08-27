@@ -1,0 +1,30 @@
+import 'package:treino_arquitetura/app/pages/consultar_cep/interfaces/i_consultar_cep_services.dart';
+import 'package:treino_arquitetura/app/pages/consultar_cep/models/endereco_model.dart';
+import 'package:treino_arquitetura/utils/result_state.dart';
+
+/// Desafio 02 — implementar consumo HTTP da ViaCEP.
+///
+/// Dicas:
+/// 1. Importe `package:http/http.dart` como `http`
+/// 2. Faça GET em `https://viacep.com.br/ws/$cep/json/`
+/// 3. Remova hífen/espaços do CEP antes de chamar a API
+/// 4. Se o JSON vier com `"erro": true`, retorne [ErrorResultState]
+/// 5. Em sucesso, use [EnderecoModel.fromJson] e retorne [SuccessResultState]
+/// 6. Em falha de rede/parse, retorne [ErrorResultState] com mensagem clara
+class ConsultarCepServices implements IConsultarCepServices {
+  static final ConsultarCepServices _instance = ConsultarCepServices._internal();
+
+  factory ConsultarCepServices() => _instance;
+
+  static ConsultarCepServices get instance => _instance;
+
+  ConsultarCepServices._internal();
+
+  @override
+  Future<ResultState<EnderecoModel>> buscarPorCep(String cep) async {
+    // TODO(estagiário): implementar chamada HTTP com o pacote `http`
+    return ErrorResultState(
+      message: 'Serviço ainda não implementado. Abra consultar_cep_services.dart e complete o TODO.',
+    );
+  }
+}

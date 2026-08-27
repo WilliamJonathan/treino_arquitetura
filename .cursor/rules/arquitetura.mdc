@@ -1,0 +1,13 @@
+---
+description: Padrão de arquitetura Flutter da empresa (Page/Store/Service)
+globs: lib/**/*.dart
+alwaysApply: false
+---
+
+# Arquitetura Flutter
+
+- Siga `lib/app/pages/exemplo/` como referência.
+- Camadas: Page → Store (`ChangeNotifier` + `GenericStates`) → Interface/Service (`ResultState`, singleton) → Model.
+- Não invente padrões (sem repository/usecase/BLoC/GetX).
+- Novas stores: registrar em `main.dart`. Novas telas: registrar em `app_routes.dart`.
+- Preserve comentários `TODO(estagiário)` — são desafios de estudo.

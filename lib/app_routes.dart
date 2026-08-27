@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:treino_arquitetura/app/pages/calculadora/calculadora_page.dart';
+import 'package:treino_arquitetura/app/pages/cliente/cliente_page.dart';
+import 'package:treino_arquitetura/app/pages/consultar_cep/consultar_cep_page.dart';
 import 'package:treino_arquitetura/app/pages/exemplo/exemplo_page.dart';
 import 'package:treino_arquitetura/app/pages/home/home_page.dart';
 
@@ -11,6 +14,9 @@ class AppRoutes {
 
   // ── Rotas de funcionalidades ──────────────────────────────────────────────
   static const String exemploPage = '/exemplo';
+  static const String calculadoraPage = '/calculadora';
+  static const String consultarCepPage = '/consultar-cep';
+  static const String clientePage = '/clientes';
 
   static const String inativoPage = '/inativo';
 
@@ -22,6 +28,15 @@ class AppRoutes {
 
       case exemploPage:
         return MaterialPageRoute(builder: (_) => const ExemploPage());
+
+      case calculadoraPage:
+        return MaterialPageRoute(builder: (_) => const CalculadoraPage());
+
+      case consultarCepPage:
+        return MaterialPageRoute(builder: (_) => const ConsultarCepPage());
+
+      case clientePage:
+        return MaterialPageRoute(builder: (_) => const ClientePage());
 
       // ── Conta inativa ─────────────────────────────────────────────────────
       case inativoPage:

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:treino_arquitetura/app/pages/cliente/stores/cliente_page_store.dart';
+import 'package:treino_arquitetura/app/pages/consultar_cep/stores/consultar_cep_page_store.dart';
 import 'package:treino_arquitetura/app/pages/exemplo/stores/exemplo_page_store.dart';
 import 'package:treino_arquitetura/app/pages/splash_screen/splash_screen_page.dart';
 import 'package:treino_arquitetura/app_routes.dart';
@@ -19,6 +21,12 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => ExemploPageStore(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => ConsultarCepPageStore(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ClientePageStore(),
+        ),
       ],
       child: const MyApp(rotaInicial: rotaInicial),
     ),
@@ -37,7 +45,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       scaffoldMessengerKey: rootScaffoldMessengerKey,
-      title: 'Econo App',
+      title: 'Treino Arquitetura',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
