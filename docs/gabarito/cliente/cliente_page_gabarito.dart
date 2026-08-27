@@ -7,6 +7,9 @@ import 'package:treino_arquitetura/utils/generic_states.dart';
 
 /// Gabarito do Desafio 03 — Page.
 /// Copie/adapte só depois de tentar sozinho.
+///
+/// Controllers ficam no widget do bottom sheet (dispose seguro),
+/// igual ao padrão corrigido em `exemplo_page.dart`.
 class ClientePageGabarito extends StatefulWidget {
   const ClientePageGabarito({super.key});
 
@@ -24,97 +27,21 @@ class _ClientePageGabaritoState extends State<ClientePageGabarito> {
   }
 
   Future<void> _abrirFormulario({ClienteModel? cliente}) async {
-    final nomeController = TextEditingController(text: cliente?.nome ?? '');
-    final apelidoController = TextEditingController(text: cliente?.apelido ?? '');
-    final formKey = GlobalKey<FormState>();
     final isEdicao = cliente != null;
 
-    final salvou = await showModalBottomSheet<bool>(
+    final resultado = await showModalBottomSheet<ClienteModel>(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (sheetContext) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 8,
-            bottom: MediaQuery.viewInsetsOf(sheetContext).bottom + 20,
-          ),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  isEdicao ? 'Editar cliente' : 'Novo cliente',
-                  style: Theme.of(sheetContext).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: nomeController,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: const InputDecoration(
-                    labelText: 'Nome',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.person_outline),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Informe o nome';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-                TextFormField(
-                  controller: apelidoController,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: const InputDecoration(
-                    labelText: 'Apelido',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.badge_outlined),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Informe o apelido';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                FilledButton(
-                  onPressed: () {
-                    if (!(formKey.currentState?.validate() ?? false)) return;
-                    Navigator.pop(sheetContext, true);
-                  },
-                  child: Text(isEdicao ? 'Salvar alterações' : 'Cadastrar'),
-                ),
-              ],
-            ),
-          ),
-        );
+        return _ClienteFormSheet(cliente: cliente);
       },
     );
 
-    if (salvou != true || !mounted) {
-      nomeController.dispose();
-      apelidoController.dispose();
-      return;
-    }
+    if (resultado == null || !mounted) return;
 
     final store = Provider.of<ClientePageStore>(context, listen: false);
-    final model = ClienteModel(
-      id: cliente?.id ?? 0,
-      nome: nomeController.text,
-      apelido: apelidoController.text,
-    );
-
-    nomeController.dispose();
-    apelidoController.dispose();
-
-    final ok = isEdicao ? await store.update(model) : await store.store(model);
+    final ok = isEdicao ? await store.update(resultado) : await store.store(resultado);
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -292,6 +219,113 @@ class _ClientePageGabaritoState extends State<ClientePageGabarito> {
 
           return const SizedBox.shrink();
         },
+      ),
+    );
+  }
+}
+
+/// Formulário do bottom sheet — dono dos controllers (dispose seguro).
+class _ClienteFormSheet extends StatefulWidget {
+  const _ClienteFormSheet({this.cliente});
+
+  final ClienteModel? cliente;
+
+  @override
+  State<_ClienteFormSheet> createState() => _ClienteFormSheetState();
+}
+
+class _ClienteFormSheetState extends State<_ClienteFormSheet> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _nomeController;
+  late final TextEditingController _apelidoController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nomeController = TextEditingController(text: widget.cliente?.nome ?? '');
+    _apelidoController = TextEditingController(text: widget.cliente?.apelido ?? '');
+  }
+
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _apelidoController.dispose();
+    super.dispose();
+  }
+
+  void _salvar() {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    Navigator.pop(
+      context,
+      ClienteModel(
+        id: widget.cliente?.id ?? 0,
+        nome: _nomeController.text,
+        apelido: _apelidoController.text,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isEdicao = widget.cliente != null;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 20,
+        right: 20,
+        top: 8,
+        bottom: MediaQuery.viewInsetsOf(context).bottom + 20,
+      ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              isEdicao ? 'Editar cliente' : 'Novo cliente',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _nomeController,
+              textCapitalization: TextCapitalization.words,
+              decoration: const InputDecoration(
+                labelText: 'Nome',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.person_outline),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Informe o nome';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _apelidoController,
+              textCapitalization: TextCapitalization.words,
+              decoration: const InputDecoration(
+                labelText: 'Apelido',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.badge_outlined),
+              ),
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Informe o apelido';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 20),
+            FilledButton(
+              onPressed: _salvar,
+              child: Text(isEdicao ? 'Salvar alterações' : 'Cadastrar'),
+            ),
+          ],
+        ),
       ),
     );
   }

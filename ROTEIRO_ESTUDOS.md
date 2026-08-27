@@ -4,6 +4,96 @@ Siga a ordem. Cada desafio aumenta a complexidade.
 
 ---
 
+## Git — obrigatório em todo desafio
+
+Antes de codar cada desafio, crie uma **branch** no formato:
+
+```text
+seu-nome+nome-do-desafio
+```
+
+Exemplos de nome: `jonathan+calculadora`, `jonathan+consultar-cep`, `jonathan+clientes`
+
+### Comandos (fluxo completo)
+
+**1. Atualizar a `main` antes de começar**
+
+```bash
+git checkout main
+git pull origin main
+```
+
+**2. Criar a branch do desafio**
+
+```bash
+git checkout -b seu-nome+calculadora
+```
+
+Troque o nome conforme o desafio:
+
+```bash
+git checkout -b seu-nome+consultar-cep
+git checkout -b seu-nome+clientes
+```
+
+**3. Ver o que mudou e preparar o commit**
+
+```bash
+git status
+git diff
+git add .
+```
+
+(Se quiser adicionar só alguns arquivos: `git add caminho/do/arquivo.dart`)
+
+**4. Commitar**
+
+```bash
+git commit -m "feat(calculadora): implementa teclado e operações básicas"
+```
+
+Outros exemplos de mensagem:
+
+```bash
+git commit -m "feat(cep): implementa ConsultarCepServices com http"
+git commit -m "feat(clientes): implementa Store e Page do CRUD"
+```
+
+**5. Enviar a branch para o remoto**
+
+Na primeira vez da branch:
+
+```bash
+git push -u origin HEAD
+```
+
+Nos próximos pushes da mesma branch:
+
+```bash
+git push
+```
+
+**6. Ao terminar o desafio**
+
+Abra um Pull Request no GitHub/GitLab **ou** avise o mentor com o nome da branch.
+
+**7. Começar o próximo desafio**
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b seu-nome+consultar-cep
+```
+
+### Regras
+
+1. **Uma branch por desafio** (não misture desafios na mesma branch)
+2. Faça commits pequenos e claros **nessa branch**
+3. Não commite direto na `main`
+4. Se der conflito, peça ajuda ao mentor antes de forçar push
+
+---
+
 ## Antes de começar
 
 1. Rode o app: `flutter pub get` e `flutter run`
@@ -101,6 +191,8 @@ Espelhe `exemplo_page_store.dart` e `consultar_cep_page_store.dart`.
 
 ## Checklist final do estagiário
 
+- [ ] Branch `nome+desafio` criada para cada desafio
+- [ ] Commits feitos na branch correta e enviados (`git push`)
 - [ ] Calculadora operacional
 - [ ] CEP consulta ViaCEP via Service
 - [ ] Clientes: Store + Page com CRUD
