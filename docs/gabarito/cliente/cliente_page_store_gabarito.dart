@@ -19,6 +19,8 @@ class ClientePageStoreGabarito extends ChangeNotifier {
   String? _mensagemAcao;
   String? get mensagemAcao => _mensagemAcao;
 
+  int $numero = 0;
+
   Future<void> index({bool showLoading = true}) async {
     if (showLoading) {
       state = LoadingGenericState();
