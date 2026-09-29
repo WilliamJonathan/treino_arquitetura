@@ -44,16 +44,26 @@ class ClienteDatabase {
 
     return openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE clientes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
-            apelido TEXT NOT NULL
+            apelido TEXT NOT NULL,
+            cpf TEXT NOT NULL
           )
         ''');
       },
+      onUpgrade: ((db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute('''
+            ALTER TABLE clientes ADD COLUMN cpf TEXT NOT NULL DEFAULT '';
+          ''');
+        }
+      })
     );
   }
 }
+
+          

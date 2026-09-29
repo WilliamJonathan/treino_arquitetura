@@ -18,8 +18,8 @@ class ClientePageStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? _mensagemAcao;
-  String? get mensagemAcao => _mensagemAcao;
+  String _mensagemAcao = '';
+  String get mensagemAcao => _mensagemAcao;
 
   /// Lista todos os clientes.
   Future<void> index() async {
@@ -27,6 +27,19 @@ class ClientePageStore extends ChangeNotifier {
     // 1. state = LoadingGenericState()
     // 2. chamar _clienteServices.index()
     // 3. result.fold → SuccessGenericState / ErrorGenericState / EmptyGenericState
+    state = LoadingGenericState();
+    final result = await _clienteServices.index();
+    result.fold(
+      onSuccess: (data) {
+        state = SuccessGenericState(data: data);
+      },
+      onError: (message) {
+        state = ErrorGenericState(message: message);
+      },
+      onEmpty: () {
+        state = EmptyGenericState();
+      }
+    );
   }
 
   /// Cria um cliente. Retorne true se deu certo.
@@ -35,18 +48,69 @@ class ClientePageStore extends ChangeNotifier {
     // 1. chamar _clienteServices.store(data)
     // 2. preencher _mensagemAcao
     // 3. se sucesso, chamar await index() e retornar true
-    return false;
+    
+    final result = await _clienteServices.store(data);
+
+    bool sucesso = false;
+    result.fold(  
+      onSuccess: (_) async{
+        _mensagemAcao = 'Cliente cadastrado com sucesso';
+        sucesso = true;
+        
+      },
+      onError: (message) {
+        _mensagemAcao = message;
+        sucesso = false;
+       
+      },
+      onEmpty: () {
+        _mensagemAcao = 'Nenhum dado retornado';
+        sucesso = false;
+      }
+    );
+    if (sucesso) {
+      await index();
+    }
+    return sucesso;
   }
 
   /// Atualiza um cliente. Retorne true se deu certo.
   Future<bool> update(ClienteModel data) async {
     // TODO(estagiário): espelhe store(), usando _clienteServices.update
-    return false;
+    final result = await _clienteServices.update(data);
+    result.fold(
+      onSuccess: (_) {
+        _mensagemAcao = 'Cliente atualizado com sucesso';
+        index();
+        return true;
+      },
+      onError: (message) {
+        _mensagemAcao = message;
+        return false;
+      },
+      onEmpty: () {
+        _mensagemAcao = 'Nenhum dado retornado';
+       return false;
+      }
+    );
+    return false; // Retorne false se não for sucesso
   }
 
   /// Exclui um cliente pelo id. Retorne true se deu certo.
-  Future<bool> destroy(int id) async {
+  Future<void> destroy(int id) async {
     // TODO(estagiário): espelhe store(), usando _clienteServices.destroy
-    return false;
+    final result = await _clienteServices.destroy(id);
+    result.fold(
+      onSuccess: (_) {
+        _mensagemAcao = 'Cliente excluído com sucesso';
+        index();
+      },
+      onError: (message) {
+        _mensagemAcao = message;
+      },
+      onEmpty: () {
+        _mensagemAcao = 'Nenhum dado retornado';
+      }
+    );
   }
 }

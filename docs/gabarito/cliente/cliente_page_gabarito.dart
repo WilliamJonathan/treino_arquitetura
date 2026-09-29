@@ -46,7 +46,7 @@ class _ClientePageGabaritoState extends State<ClientePageGabarito> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(store.mensagemAcao ?? (ok ? 'OK' : 'Erro')),
+        content: Text(store.mensagemAcao),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -76,12 +76,12 @@ class _ClientePageGabaritoState extends State<ClientePageGabarito> {
     if (confirmar != true || !mounted) return;
 
     final store = Provider.of<ClientePageStore>(context, listen: false);
-    final ok = await store.destroy(cliente.id);
+    await store.destroy(cliente.id);
     if (!mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(store.mensagemAcao ?? (ok ? 'OK' : 'Erro')),
+        content: Text(store.mensagemAcao),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -259,6 +259,7 @@ class _ClienteFormSheetState extends State<_ClienteFormSheet> {
     Navigator.pop(
       context,
       ClienteModel(
+        cpf: widget.cliente?.cpf ?? '',
         id: widget.cliente?.id ?? 0,
         nome: _nomeController.text,
         apelido: _apelidoController.text,
